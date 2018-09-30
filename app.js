@@ -1,18 +1,46 @@
 const express = require('express');
 const request = require('request');
+const bodyParser = require('body-parser');
 const app = express();
 let port = process.env.PORT || 3000;
 
+app.use(bodyParser.json());
+
 app.get('/', (req, res) => {
-  request({
-    'url':'https://www.google.com/search?q=relgrowth&hl=en&gl=US',
-    'proxy':'http://115.77.191.180:53281'
-  },
-  function (error, response, body) {
-        console.log(body);
-        res.send(body);
-  })
+  res.send('App running');
+});
 
-})
+app.post('/proxy', (req, res, next) => {
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+  let delay = getRandomInt(2000, 10000);
+
+  setTimeout(function() {
+
+    console.log('Request sent after ' + delay + 'ms');
+
+    try {
+      request({
+        'url': req.body.url,
+        'proxy': `http://${req.body.ip}`
+      },
+      (error, response, body) => {
+        if(response !== undefined) {
+          res.json(response.body);
+        } else {
+          console.log('Wrong proxy configuration sent.');
+          res.json('Wrong proxy configuration sent.');
+        }
+      });
+    } catch(e) {
+      res.json(e);
+    }
+  }, delay);
+
+});
+
+app.listen(port, () => console.log('App listening on ' + port))
+
+// Utility
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
