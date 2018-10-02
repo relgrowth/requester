@@ -1,7 +1,6 @@
 const express = require('express');
 const request = require('request');
 const bodyParser = require('body-parser');
-const iconv  = require('iconv-lite');
 const app = express();
 let port = process.env.PORT || 3000;
 
@@ -23,12 +22,11 @@ app.post('/proxy', (req, res, next) => {
       request({
         'url': req.body.url,
         'proxy': `http://${req.body.ip}`,
-        'encoding': 'null'
+        'encoding': 'utf-8'
       },
       (error, response, body) => {
         if(response !== undefined) {
-          let decodedResult = iconv.decode(new Buffer(response.body), "ISO-8859-1");
-          res.json(decodedResult);
+          res.json(response.body);
         } else {
           console.log('Wrong proxy configuration sent.');
           res.json('Wrong proxy configuration sent.');
