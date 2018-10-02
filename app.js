@@ -22,7 +22,7 @@ app.post('/proxy', (req, res, next) => {
       request({
         'url': req.body.url,
         'proxy': `http://${req.body.ip}`,
-        'encoding': 'utf8'
+        'encoding': 'binary'
       },
       (error, response, body) => {
         if(response !== undefined) {
