@@ -17,6 +17,7 @@ app.post('/proxy', (req, res, next) => {
   setTimeout(function() {
 
     console.log('Request sent after ' + delay + 'ms');
+    console.log(req.body.url);
 
     try {
       request({
@@ -25,6 +26,7 @@ app.post('/proxy', (req, res, next) => {
       },
       (error, response, body) => {
         if(response !== undefined) {
+          console.log(response.body);
           res.json(response.body);
         } else {
           console.log('Wrong proxy configuration sent.');
