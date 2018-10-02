@@ -17,16 +17,17 @@ app.post('/proxy', (req, res, next) => {
   setTimeout(function() {
 
     console.log('Request sent after ' + delay + 'ms');
-    console.log(req.body.url);
 
     try {
       request({
         'url': req.body.url,
-        'proxy': `http://${req.body.ip}`
+        'proxy': `http://${req.body.ip}`,
+        'headers': {
+          'content-type': 'application/json'
+        }
       },
       (error, response, body) => {
         if(response !== undefined) {
-          console.log(response.body);
           res.json(response.body);
         } else {
           console.log('Wrong proxy configuration sent.');
