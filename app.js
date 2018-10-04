@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 let port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+app.use(bodyParser.text());
 
 app.get('/', (req, res) => {
   res.send('App running');
@@ -26,14 +26,14 @@ app.post('/proxy', (req, res, next) => {
       },
       (error, response, body) => {
         if(response !== undefined) {
-          res.json(response.body);
+          res.text(response.body);
         } else {
           console.log('Wrong proxy configuration sent.');
-          res.json('Wrong proxy configuration sent.');
+          res.text('Wrong proxy configuration sent.');
         }
       });
     } catch(e) {
-      res.json(e);
+      res.text(e);
     }
   }, delay);
 
