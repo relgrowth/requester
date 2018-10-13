@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 
 app.post('/proxy', (req, res, next) => {
 
-  let delay = getRandomInt(5000, 2000);
+  let delay = getRandomInt(500, 2000);
 
   setTimeout(function() {
 
