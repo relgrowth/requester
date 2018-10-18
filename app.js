@@ -6,7 +6,7 @@ const timeout = require('connect-timeout');
 const app = express();
 let port = process.env.PORT || 3000;
 
-app.use(timeout(5000, { respond: false }));
+app.use(timeout(10000, { respond: false }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
@@ -46,7 +46,7 @@ app.post('/startpage-proxy', (req, res, next) => {
       'encoding': null
     },
     (error, response, body) => {
-      if(req.timedout) { return res.json('Timeout'); }
+      if(req.timedout) { console.log('Timeout'); return res.json('Timeout'); }
       if(response !== undefined) {
         let data = iconv.decode(response.body, 'cp1251');
         res.json(data);
