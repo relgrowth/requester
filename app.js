@@ -19,7 +19,8 @@ app.post('/proxy', (req, res, next) => {
     request({
       'url': req.body.url,
       'proxy': `http://${req.body.ip}`,
-      'encoding': null
+      'encoding': null,
+      'timeout': 5000
     },
     (error, response, body) => {
       if(response !== undefined) {
