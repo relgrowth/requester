@@ -11,6 +11,7 @@ app.use(timeout(5000));
 
 function haltOnTimedout(req, res, next){
   if (!req.timedout) next();
+  else { res.send('Server timed out.') }
 }
 
 app.get('/', (req, res) => {
