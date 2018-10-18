@@ -13,7 +13,29 @@ app.get('/', (req, res) => {
 
 app.post('/proxy', (req, res, next) => {
 
-  let delay = getRandomInt(500, 2000);
+  try {
+    request({
+      'url': req.body.url,
+      'proxy': `http://${req.body.ip}`,
+      'encoding': null,
+      'timeout': 25000
+    },
+    (error, response, body) => {
+      if(response !== undefined) {
+        let data = iconv.decode(response.body, 'cp1251');
+        res.json(data);
+      } else {
+        console.log(error);
+        res.json('Wrong proxy configuration sent.');
+      }
+    });
+  } catch(e) {
+    res.json(e);
+  }
+
+});
+
+app.post('/startpage-proxy', (req, res, next) => {
 
   try {
     request({
