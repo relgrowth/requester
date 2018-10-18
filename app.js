@@ -15,29 +15,24 @@ app.post('/proxy', (req, res, next) => {
 
   let delay = getRandomInt(500, 2000);
 
-  setTimeout(function() {
-
-    console.log('Request sent after ' + delay + 'ms');
-
-    try {
-      request({
-        'url': req.body.url,
-        'proxy': `http://${req.body.ip}`,
-        'encoding': null
-      },
-      (error, response, body) => {
-        if(response !== undefined) {
-          let data = iconv.decode(response.body, 'cp1251');
-          res.json(data);
-        } else {
-          console.log('Wrong proxy configuration sent.');
-          res.json('Wrong proxy configuration sent.');
-        }
-      });
-    } catch(e) {
-      res.json(e);
-    }
-  }, delay);
+  try {
+    request({
+      'url': req.body.url,
+      'proxy': `http://${req.body.ip}`,
+      'encoding': null
+    },
+    (error, response, body) => {
+      if(response !== undefined) {
+        let data = iconv.decode(response.body, 'cp1251');
+        res.json(data);
+      } else {
+        console.log(error);
+        res.json('Wrong proxy configuration sent.');
+      }
+    });
+  } catch(e) {
+    res.json(e);
+  }
 
 });
 
