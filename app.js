@@ -2,17 +2,10 @@ const express = require('express');
 const request = require('request');
 const bodyParser = require('body-parser');
 const iconv = require('iconv-lite');
-const timeout = require('connect-timeout');
 const app = express();
 let port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-app.use(timeout(5000));
-
-function haltOnTimedout(req, res, next){
-  if (!req.timedout) next();
-  else { res.send('Server timed out.') }
-}
 
 app.get('/', (req, res) => {
   res.send('App running');
@@ -47,7 +40,8 @@ app.post('/startpage-proxy', (req, res, next) => {
     request({
       'url': req.body.url,
       'proxy': `http://${req.body.ip}`,
-      'encoding': null
+      'encoding': null,
+      'timeout': 5000
     },
     (error, response, body) => {
       if(response !== undefined) {
@@ -55,10 +49,11 @@ app.post('/startpage-proxy', (req, res, next) => {
         res.json(data);
       } else {
         console.log(error);
-        res.json('Wrong proxy configuration sent.');
+        res.json('Timeout');
       }
     });
   } catch(e) {
+    console.log(e);
     res.json(e);
   }
 
