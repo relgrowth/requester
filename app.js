@@ -41,7 +41,7 @@ app.post('/startpage-proxy', (req, res, next) => {
       'url': req.body.url,
       'proxy': `http://${req.body.ip}`,
       'encoding': null,
-      'timeout': 5000
+      'timeout': 500
     },
     (error, response, body) => {
       if(response !== undefined) {
