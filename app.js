@@ -48,7 +48,7 @@ app.post('/startpage-proxy', (req, res, next) => {
         let data = iconv.decode(response.body, 'cp1251');
         res.json(data);
       } else {
-        console.log(error);
+        console.log('Timeout');
         res.json('Timeout');
       }
     });
